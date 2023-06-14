@@ -384,6 +384,12 @@
             Id="0X00001504" Enable="true" Timeout="0" Target="pineapple"
             Resources="0x40800000, 0XA"/>
 
+        <!-- video decode 60 fps content tunings-->
+        <!-- MPCTLV3_MIN_FREQ_CLUSTER_BIG_CORE_0, 0XA -->
+        <Config
+            Id="0X00001506" Enable="true" Timeout="0" Target="pineapple"
+            Resources="0x40800000, 0XA"/>
+
         <!-- psm light mode power hint-->
         <!-- MPCTLV3_MIN_FREQ_CLUSTER_BIG_CORE_0, 0XA -->
         <Config
