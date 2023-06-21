@@ -226,11 +226,14 @@
         <!--P CPU - Disable Core Control -->
         <!--SCHED_IDLE_ENOUGH Set 0 -->
         <!--L CPU - Set hispeed freq 556800 -->
+        <!--Min partial halt titanium core numbers 0-->
+        <!--Titanium core state2 offline timeout 20-->
         <Config
             Id="0x00001331" Enable="true" Timeout="0" Target="pineapple"
             Resources="0x4183C000, 0x21, 0x41834000, 0x64, 0x41838000, 0, 0x43034000, 0x21,
             0x43020000, 0x64, 0x43024000, 0, 0x4303C000, 0x858B8 ,0x40804100, 0x459, 0x41444100, 0, 0x41444000, 0, 0x41440000, 0x63,
-            0x40CE0000, 0x0032000A, 0x40CE0200, 0x00550055, 0x41008000, 0, 0x41008100, 0, 0x41008200, 0, 0x43C0C000, 0, 0x4143C100, 0x22C"/>
+            0x40CE0000, 0x0032000A, 0x40CE0200, 0x00550055, 0x41008000, 0, 0x41008100, 0, 0x41008200, 0, 0x43C0C000, 0, 0x4143C100, 0x22C,
+            0x41010300, 0, 0x41014300, 0x14"/>
 
         <!--camera 60fps-->
         <!--CPU-LLC BWMON - Set sample_ms 16 -->
@@ -251,11 +254,14 @@
         <!--P CPU - Disable Core Control -->
         <!--SCHED_IDLE_ENOUGH Set 0 -->
         <!--L CPU - Set hispeed freq 556800 -->
+        <!--Min partial halt titanium core numbers 0-->
+        <!--Titanium core state2 offline timeout 20-->
         <Config
             Id="0x00001332" Enable="true" Timeout="0" Target="pineapple"
             Resources="0x4183C000, 0x10, 0x41834000, 0x64, 0x41838000, 0, 0x43034000, 0x10,
             0x43020000, 0x64, 0x43024000, 0, 0x4303C000, 0x17BA38,  0x40804100, 0x459, 0x41444100, 0, 0x41444000, 0, 0x41440000, 0x63,
-            0x40CE0000, 0x0032000A, 0x40CE0200, 0x00550055, 0x41008000, 0, 0x41008100, 0, 0x41008200, 0, 0x43C0C000, 0, 0x4143C100, 0x22C"/>
+            0x40CE0000, 0x0032000A, 0x40CE0200, 0x00550055, 0x41008000, 0, 0x41008100, 0, 0x41008200, 0, 0x43C0C000, 0, 0x4143C100, 0x22C,
+            0x41010300, 0, 0x41014300, 0x14"/>
 
         <!--camera HFR 120/240 fps-->
         <!--CPU-LLC BWMON - Set sample_ms 16 -->
@@ -298,11 +304,14 @@
         <!--P CPU - Disable Core Control -->
         <!--SCHED_IDLE_ENOUGH Set 0 -->
         <!--L CPU - Set hispeed freq 556800 -->
+        <!--Min partial halt titanium core numbers 0-->
+        <!--Titanium core state2 offline timeout 20-->
         <Config
             Id="0x00001335" Enable="true" Timeout="0" Target="pineapple"
             Resources="0x4183C000, 0x21, 0x41834000, 0x64, 0x41838000, 0, 0x43034000, 0x21,
             0x43020000, 0x64, 0x43024000, 0, 0x40804100, 0x459, 0x41444100, 0, 0x41444000, 0, 0x41440000, 0x63,
-            0x40CE0000, 0x0028000A, 0x40CE0200, 0x00550055, 0x41008000, 0, 0x41008100, 0, 0x41008200, 0, 0x43C0C000, 0, 0x4143C100, 0x22C"/>
+            0x40CE0000, 0x0028000A, 0x40CE0200, 0x00550055, 0x41008000, 0, 0x41008100, 0, 0x41008200, 0, 0x43C0C000, 0, 0x4143C100, 0x22C,
+            0x41010300, 0, 0x41014300, 0x14"/>
 
         <!--video encode HFR 480 fps-->
         <!-- MPCTLV3_ALL_CPUS_PWR_CLPS_DIS, 0x1 -->
@@ -373,6 +382,12 @@
         <!-- MPCTLV3_MIN_FREQ_CLUSTER_BIG_CORE_0, 0XA -->
         <Config
             Id="0X00001504" Enable="true" Timeout="0" Target="pineapple"
+            Resources="0x40800000, 0XA"/>
+
+        <!-- video decode 60 fps content tunings-->
+        <!-- MPCTLV3_MIN_FREQ_CLUSTER_BIG_CORE_0, 0XA -->
+        <Config
+            Id="0X00001506" Enable="true" Timeout="0" Target="pineapple"
             Resources="0x40800000, 0XA"/>
 
         <!-- psm light mode power hint-->
