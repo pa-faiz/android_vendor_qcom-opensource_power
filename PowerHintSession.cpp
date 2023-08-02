@@ -17,8 +17,7 @@
 #define LOG_TAG "QTI PowerHAL"
 
 std::unordered_map<PowerHintSessionImpl*, int32_t> mPowerHintSessions;
-std::set<int32_t> uids;
-std::mutex mSessionLock, mUidLock;
+std::mutex mSessionLock;
 
 static int validateBoost(int boostVal, int boostSum) {
     boostSum += boostVal;
@@ -82,20 +81,11 @@ bool isSessionActive(PowerHintSessionImpl* session) {
 
 std::shared_ptr<aidl::android::hardware::power::IPowerHintSession> setPowerHintSession(int32_t tgid, int32_t uid, const std::vector<int32_t>& threadIds){
     LOG(INFO) << "setPowerHintSession ";
-    if(uids.find(uid) != uids.end()) {
-        LOG(ERROR) << "HintSession already exists for this uid ";
-        return nullptr;
-    }
-
     std::shared_ptr<aidl::android::hardware::power::IPowerHintSession> mPowerSession = ndk::SharedRefBase::make<PowerHintSessionImpl>(tgid, uid, threadIds);
+
     if(mPowerSession == nullptr) {
         return nullptr;
     }
-
-    mUidLock.lock();
-    uids.insert(uid);
-    mUidLock.unlock();
-
     return mPowerSession;
 }
 
@@ -189,10 +179,6 @@ ndk::ScopedAStatus PowerHintSessionImpl::close(){
         sendHint(aidl::android::hardware::power::SessionHint::CPU_LOAD_RESET);
         removePipelining();
         mThreadHandles.clear();
-
-        mUidLock.lock();
-        uids.erase(mUid);
-        mUidLock.unlock();
 
         mSessionLock.lock();
         mPowerHintSessions.erase(this);
