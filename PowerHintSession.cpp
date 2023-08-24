@@ -8,8 +8,9 @@
 #include "hint-data.h"
 #include "performance.h"
 
-#define CPU_BOOST_HINT 0x0000104E
-#define THREAD_PIPELINING 0x42C30000
+#define CPU_BOOST_HINT      0x0000104E
+#define THREAD_HIGH_UTIL    0x40C80000
+#define THREAD_LOW_LATENCY  0x40CD0000
 #define MAX_BOOST 200
 #define MIN_BOOST -200
 
@@ -17,8 +18,7 @@
 #define LOG_TAG "QTI PowerHAL"
 
 std::unordered_map<PowerHintSessionImpl*, int32_t> mPowerHintSessions;
-std::set<int32_t> uids;
-std::mutex mSessionLock, mUidLock;
+std::mutex mSessionLock;
 
 static int validateBoost(int boostVal, int boostSum) {
     boostSum += boostVal;
@@ -82,20 +82,11 @@ bool isSessionActive(PowerHintSessionImpl* session) {
 
 std::shared_ptr<aidl::android::hardware::power::IPowerHintSession> setPowerHintSession(int32_t tgid, int32_t uid, const std::vector<int32_t>& threadIds){
     LOG(INFO) << "setPowerHintSession ";
-    if(uids.find(uid) != uids.end()) {
-        LOG(ERROR) << "HintSession already exists for this uid ";
-        return nullptr;
-    }
-
     std::shared_ptr<aidl::android::hardware::power::IPowerHintSession> mPowerSession = ndk::SharedRefBase::make<PowerHintSessionImpl>(tgid, uid, threadIds);
+
     if(mPowerSession == nullptr) {
         return nullptr;
     }
-
-    mUidLock.lock();
-    uids.insert(uid);
-    mUidLock.unlock();
-
     return mPowerSession;
 }
 
@@ -128,9 +119,9 @@ PowerHintSessionImpl::~PowerHintSessionImpl(){
 
 int PowerHintSessionImpl::setThreadPipelining(int32_t tid) {
     int mHandleTid = -1;
-    int args[2] = {THREAD_PIPELINING, tid};
+    int args[4] = {THREAD_HIGH_UTIL, tid, THREAD_LOW_LATENCY, tid};
 
-    mHandleTid = interaction_with_handle(0, 0, 2, args);
+    mHandleTid = interaction_with_handle(0, 0, 4, args);
     if(mHandleTid < 0) {
             LOG(ERROR) << "Unable to put this thread tid into pipeline" << tid;
             return -1;
@@ -189,10 +180,6 @@ ndk::ScopedAStatus PowerHintSessionImpl::close(){
         sendHint(aidl::android::hardware::power::SessionHint::CPU_LOAD_RESET);
         removePipelining();
         mThreadHandles.clear();
-
-        mUidLock.lock();
-        uids.erase(mUid);
-        mUidLock.unlock();
 
         mSessionLock.lock();
         mPowerHintSessions.erase(this);
